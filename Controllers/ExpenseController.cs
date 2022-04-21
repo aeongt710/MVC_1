@@ -61,5 +61,32 @@ namespace MVC_1.Controllers
             
             return View(expense);
         }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            Expense expense = _db.Expenses.Find(id);
+            if (expense == null)
+            {
+                return NotFound();
+            }
+            return View(expense);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(Expense expense)
+        {
+            //if (ModelState.IsValid)
+            //{
+                _db.Expenses.Remove(expense);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            //}
+
+            //return View(expense);
+        }
     }
 }
