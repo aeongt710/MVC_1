@@ -22,14 +22,44 @@ namespace MVC_1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Expense expense)
         {
-            _db.Add(expense);
-            _db.SaveChanges();
-
-            return RedirectToAction("Index");
+            if(ModelState.IsValid)
+            {
+                _db.Add(expense);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View();
         }
         public IActionResult Create()
         {
             return View();
+        }
+        public IActionResult Update(int? id)
+        {
+            if(id==null)
+            {
+                return NotFound();
+            }
+            Expense expense = _db.Expenses.Find(id);
+            if(expense==null)
+            {
+                return NotFound();
+            }
+            return View(expense);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(Expense expense)
+        {
+            if(ModelState.IsValid)
+            {
+                _db.Expenses.Update(expense);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            
+            return View(expense);
         }
     }
 }
