@@ -11,5 +11,6 @@ namespace MVC_1.Data
         }
         public DbSet<Item> Items { get; set; }
         public DbSet<Expense> Expenses { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC_1.Data;
 using MVC_1.Models;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MVC_1.Controllers
 {
@@ -15,7 +17,7 @@ namespace MVC_1.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<Expense> list=_db.Expenses;
+            IEnumerable<Expense> list = _db.Expenses;
             return View(list);
         }
         [HttpPost]
@@ -32,6 +34,12 @@ namespace MVC_1.Controllers
         }
         public IActionResult Create()
         {
+            IEnumerable<SelectListItem> list = _db.Categories.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
+            ViewBag.categoryselect = list;
             return View();
         }
         public IActionResult Update(int? id)

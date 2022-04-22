@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MVC_1.Models
 {
@@ -12,5 +13,8 @@ namespace MVC_1.Models
         [Required]
         [Range(1,int.MaxValue,ErrorMessage ="Invalid!")]
         public int Amount { get; set; }
+        public int ExpenseCategoryId { get; set; }
+        [ForeignKey("ExpenseCategoryId")]
+        public virtual Category ExpenseCategory { get; set; }
     }
 }

@@ -10,24 +10,30 @@
         </div>
     </div>
     <hr />
-    <table class="table table-bordered table-striped">
+    <table class="table table-borderless table-striped">
         <thread>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Borrower</th>
-                <th>Operation</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Operations</th>
             <tr />
         </thread>
         @foreach(var item in Model){
 
         <tr>
-            <td>@item.Id</td>
-            <td>@item.Name</td>
-            <td>@item.Amount</td>
-            <td class="text-center">
-                <a asp-action="Update" asp-route-id="@item.Id" asp-controller="Expense" class="btn btn-outline-warning btn-sm ">Update</a>
-                <a asp-action="Delete" asp-route-id="@item.Id" asp-controller="Expense" class="btn btn-outline-danger btn-sm ">Delete</a>
+            <td width="10%">@item.Id</td>
+            <td width="20%">@item.Name</td>
+            <td width="20%">@item.Amount</td>
+            <td width="20%">@item.ExpenseCategoryId</td>
+            <td  class="text-center row table-borderless pr-3 pl-3">
+                <div class="col-6">
+                    <a asp-action="Update" asp-route-id="@item.Id" asp-controller="Expense" class=" btn btn-outline-warning btn-block">Update</a>
+                </div>
+                <div class="col-6">
+                    <a asp-action="Delete" asp-route-id="@item.Id" asp-controller="Expense" class="btn btn-outline-danger btn-block">Delete</a>
+                </div>
             </td>
         </tr >
 
