@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using MVC_1.Data;
-using MVC_1.Models;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MVC_1.Data;
+using MVC_1.Models;
+using MVC_1.Models.ViewModels;
 
 namespace MVC_1.Controllers
 {
@@ -18,41 +19,62 @@ namespace MVC_1.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<Expense> list = _db.Expenses.Include(m=>m.ExpenseCategory);
+            IEnumerable<Expense> list = _db.Expenses.Include(m => m.ExpenseCategory);
 
             return View(list);
         }
 
 
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public IActionResult Create(Expense expense)
+        // {
+        //     if (ModelState.IsValid)
+        //     {
+        //         _db.Add(expense);
+        //         _db.SaveChanges();
+        //         return RedirectToAction("Index");
+        //     }
+        //     return View();
+        // }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Expense expense)
+        public IActionResult Create(ExpenseCateVM expense)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                _db.Add(expense);
+                _db.Add(expense.Expense);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View();
         }
 
-
         public IActionResult Create()
         {
-            IEnumerable<SelectListItem> list = _db.Categories.Select(i => new SelectListItem
+            // IEnumerable<SelectListItem> list = _db.Categories.Select(i => new SelectListItem
+            // {
+            //     Text = i.Name,
+            //     Value = i.Id.ToString()
+            // });
+            // ViewBag.categoryselect = list;
+            ExpenseCateVM vm = new ExpenseCateVM()
             {
-                Text = i.Name,
-                Value = i.Id.ToString()
-            });
-            ViewBag.categoryselect = list;
-            return View();
+                Expense = new Expense(),
+                ExpenseCate = _db.Categories.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                })
+            };
+
+            return View(vm);
         }
 
 
         public IActionResult Update(int? id)
         {
-            if(id==null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -61,9 +83,9 @@ namespace MVC_1.Controllers
             {
                 Text = i.Name,
                 Value = i.Id.ToString()
-            }) ;
+            });
             ViewBag.catelist = list;
-            if(expense==null)
+            if (expense == null)
             {
                 return NotFound();
             }
@@ -75,13 +97,13 @@ namespace MVC_1.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Update(Expense expense)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _db.Expenses.Update(expense);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            
+
             return View(expense);
         }
 
@@ -106,9 +128,9 @@ namespace MVC_1.Controllers
         {
             //if (ModelState.IsValid)
             //{
-                _db.Expenses.Remove(expense);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+            _db.Expenses.Remove(expense);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
             //}
 
             //return View(expense);
