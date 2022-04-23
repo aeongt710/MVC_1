@@ -5,6 +5,7 @@ using MVC_1.Models;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace MVC_1.Controllers
 {
@@ -17,9 +18,12 @@ namespace MVC_1.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<Expense> list = _db.Expenses;
+            IEnumerable<Expense> list = _db.Expenses.Include(m=>m.ExpenseCategory);
+
             return View(list);
         }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Expense expense)
@@ -32,6 +36,8 @@ namespace MVC_1.Controllers
             }
             return View();
         }
+
+
         public IActionResult Create()
         {
             IEnumerable<SelectListItem> list = _db.Categories.Select(i => new SelectListItem
@@ -42,6 +48,8 @@ namespace MVC_1.Controllers
             ViewBag.categoryselect = list;
             return View();
         }
+
+
         public IActionResult Update(int? id)
         {
             if(id==null)
@@ -49,12 +57,19 @@ namespace MVC_1.Controllers
                 return NotFound();
             }
             Expense expense = _db.Expenses.Find(id);
+            IEnumerable<SelectListItem> list = _db.Categories.Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            }) ;
+            ViewBag.catelist = list;
             if(expense==null)
             {
                 return NotFound();
             }
             return View(expense);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -69,6 +84,8 @@ namespace MVC_1.Controllers
             
             return View(expense);
         }
+
+
 
         public IActionResult Delete(int? id)
         {

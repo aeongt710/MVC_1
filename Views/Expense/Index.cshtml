@@ -26,7 +26,7 @@
             <td width="10%">@item.Id</td>
             <td width="20%">@item.Name</td>
             <td width="20%">@item.Amount</td>
-            <td width="20%">@item.ExpenseCategoryId</td>
+            <td width="20%">@item.ExpenseCategory.Name</td>
             <td  class="text-center row table-borderless pr-3 pl-3">
                 <div class="col-6">
                     <a asp-action="Update" asp-route-id="@item.Id" asp-controller="Expense" class=" btn btn-outline-warning btn-block">Update</a>
